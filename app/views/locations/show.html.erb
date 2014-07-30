@@ -1,0 +1,32 @@
+<p id="notice"><%= notice %></p>
+
+<h2>Location:</h2>
+<p>
+  <strong>Address:</strong>
+  <%= @location.address %>
+</p>
+<p>
+  <strong>Latitude:</strong>
+  <%= @location.latitude %>
+</p>
+<p>
+  <strong>Longitude:</strong>
+  <%= @location.longitude %>
+</p>
+
+<h3>Nearby Locations</h3>
+<ul>
+<% for location in @location.nearbys(50) %>
+  <li><%= link_to location.address, location %> (<%= location.distance.round(2) %> miles)</li>
+<% end %>
+<br/>
+<%= @location.first.distance_to(@location.last) %>
+</ul>
+
+<%= image_tag "http://maps.google.com/maps/api/staticmap?size=450x300&zoom=16&markers=#{@location.latitude}%2C#{@location.longitude}" %>
+
+<p>
+  <%= link_to "Edit", edit_location_path(@location) %> |
+  <%= link_to "Destroy", @location, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", locations_path %>
+</p>
