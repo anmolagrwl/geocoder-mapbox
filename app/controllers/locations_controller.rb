@@ -8,6 +8,30 @@ class LocationsController < ApplicationController
       @locations = Location.near(params[:search], 50, :order => "distance")
     else
       @locations = Location.all
+      @geojson = Array.new
+
+      @locations.each do |location|
+        @geojson << {
+            geometry: {
+              coordinates: [location.longitude, location.latitude],
+              type: 'Point'
+            },
+            id: location.id,
+            properties:{
+              title: location.address,
+              :'marker-color' => '#3887be',
+              :'marker-symbol' => 'embassy',
+              :'marker-size' => 'medium'
+            },
+            type: 'Feature'
+        }
+      end
+
+      respond_to do |format|
+        format.html
+        format.json { render json: @geojson }  # respond with the created JSON object
+      end
+      
     end
   end
 
